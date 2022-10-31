@@ -1,0 +1,27 @@
+@charset "UTF-8";
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+body {
+    margin: 0 auto;
+    text-align: center;
+    font-family: 'Nanum Gothic';
+    font-weight: bold;
+}
+
+table {
+    margin: 30px auto;
+    text-align: center;
+    width: 300px;
+}
+
+th {
+    background-color: rgb(222, 247, 183);
+}
+
+#secondTable {
+    border-color:black;
+}
+
+.joinForm{
+    margin-top: 25px;
+}

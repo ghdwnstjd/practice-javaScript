@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>script 태그 안에서 코드 작성</title>
+</head>
+<body>
+    <h3>마우스를 올려보세요</h3>
+    <hr>
+    <img src="images/boy.png" onmouseover="over(this)" onmouseout="out(this)">
+</body>
+<script>
+    function over(obj){
+        obj.src = "images/girl.png";
+    }
+
+    function out(obj){
+        obj.src = "images/boy.png";
+    }
+</script>
+</html>

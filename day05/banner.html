@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슬라이드 배너</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <section class="container">
+        <div class="arrow left prev">&lt;</div>
+        <div class="banner">
+            <div><img src="banner/001.png"></div>
+            <div><img src="banner/002.png"></div>
+            <div><img src="banner/003.png"></div>
+            <div><img src="banner/004.png"></div>
+            <div><img src="banner/005.png"></div>
+            <div><img src="banner/006.png"></div>
+        </div>
+        <div class="arrow right next">&gt;</div>
+        <div class="buttons">
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+        </div>
+    </section>
+</body>
+<script>
+    // const div = document.querySelector("div.banner");
+    // var count = 0;
+    // setInterval(function(){
+    //     count ++;
+    //     count = count == 6 ? 0 : count;
+    //     div.style.transform = "translate(-" + 90 * count + "vw)";
+    // }, 4000);
+    
+        function autoSlide(){
+            /* 슬라이드처럼 이동하도록 transform을 준다. */
+            banner.style.transition = "transform 0.5s"
+            // 마지막 슬라이드일 때
+            // 6번 뒤에 1번 배치시킨다.
+            // 6번에서 1번으로 슬라이드 진행
+            // 0s를 줘서 원래 1번 위치로 이동(슬라이드 효과는 안보임)
+            count ++;
+            if(count == 6){
+                /* 마지막 버튼의 색을 default 색으로 변경 */
+                buttons[count - 1].style.backgroundColor = "#f0f0f0";
+                /* 배너 이미지를 6번 이미지 다음 이미지로 변경(첫 번째 이미지)*/
+                banner.style.transform = "translate(-" + 90 * (count + 1) + "vw)";
+                /* 해당 함수를 쓰는 이유는 0.5초의 딜레이를 의도적으로 주어 바로 바뀌는 이미지가 어색하지 않도록 함 */
+                setTimeout(function(){
+                    /* 슬라이드효과 없이 이미지 수정 */
+                    banner.style.transition = "transform 0s"
+                    /* 이미지 위치는 1번 사진 */
+                    banner.style.transform = "translate(-90vw)";
+                }, 500);
+                /* count 초기화 */
+                count = 0;
+                /* 첫 번째 사진에 해당하는 버튼 색 검은색으로 변경 */
+                buttons[count].style.backgroundColor = "black";
+            }else{
+                /* 마지막 버튼의 다음이 아닐 경우에는 슬라이드 그대로 이동 */
+                buttons[count - 1].style.backgroundColor = "#f0f0f0";
+                buttons[count].style.backgroundColor = "black";
+                banner.style.transform = "translate(-" + 90 * (count + 1) + "vw)";
+            }
+            /* temp에 현재 버튼이 어떤 버튼인지 계속 저장 */
+            temp = buttons[count];
+        }
+
+    // 무한 반복
+    const banner = document.querySelector("div.banner"); 
+    const buttons = document.querySelectorAll("div.buttons button"); /* 버튼 배열로 저장 */
+    var count = 0, temp = buttons[count]; 
+    let firstDiv = document.createElement("div");
+    let lastDiv = document.createElement("div");
+    
+    /* 첫 번째 이미지를 배너 가장 마지막에 추가 */
+    firstDiv.innerHTML = `<img src="banner/001.png">`; /* firstDiv에 1번 이미지 절대경로로 추가 */
+    banner.appendChild(firstDiv); /* banner의 자식 객체 마지막에 추가 */
+    
+    /* 마지막 이미지를 배너 배열 가장 처음에 추가 */
+    lastDiv.innerHTML = `<img src="banner/006.png">`; /* lastDib에 6번 이미지 절대경로 추가 */
+    banner.insertBefore(lastDiv, document.querySelector("div.banner div")); /* querySelector로 찾았으므로 가장 첫번째 위치가 나오고, 그 앞에 6번 이미지 추가 */
+    
+    /* 초기 1번 이미지 해당 버튼에 검은색 */
+    buttons[count].style.backgroundColor = "black";
+    
+    /* 초기 1번 이미지로 위치 지정 */
+    banner.style.transform = "translate(-90vw)";
+
+    /* 슬라이드 위치 자동 변경 함수를 4초마다 실행 */
+    var inter = setInterval(autoSlide, 4000);
+
+    // 원하는 번호의 배너 보기
+    // 각 버튼마다 클릭 이벤트 적용
+    var numberButtonCheck = true;
+    buttons.forEach((v, i, btns) => {
+        /* i+1번째 버튼 클릭 시 실행 */
+        btns[i].addEventListener("click", function(){
+            /* 슬라이드형으로 위치 이동 */
+            banner.style.transition = "transform 0.5s"
+            if(numberButtonCheck){
+                /* numberButtonCheck 플래그 */
+                numberButtonCheck = false;
+                /* 자동 슬라이드 함수를 초기화하는 이유는 버튼 클릭과 슬라이드 자동 이동이 겹칠 수 있기 때문에 버튼 클릭 시 초기화를 통해 이동이 겹치지 않도록 해준다. */
+                clearInterval(inter);
+                count = i;
+                /* temp(이전 선택된 버튼)의 색 변경 */
+                temp.style.backgroundColor = "#f0f0f0";
+                /* 현재 선택된 버튼 색 변경 */
+                buttons[count].style.backgroundColor = "black";
+                /* 이미지가 맨 앞에 마지막 이미지 추가 되었기 때문에 count+1을 해준다. */
+                banner.style.transform = "translate(-" + 90 * (count + 1) + "vw)";
+                /* 현재 선택된 버튼으로 temp 재저장 */
+                temp = buttons[count];
+                /* 클릭 액션이 끝났으므로 inter 함수 재실행 */
+                inter = setInterval(autoSlide, 4000);
+                /* 0.5초의 딜레이를 주어 버튼 클릭이 0.5초에 한 번만 가능하도록 한다. */
+                setTimeout(function(){
+                    numberButtonCheck = true;
+                }, 500);
+            }
+        });
+    });
+
+    // 이전 버튼, 다음 버튼 구현
+    const arrows = document.querySelectorAll("div.arrow");
+    var arrowButtonCheck = true;
+    arrows.forEach(arrow => {
+        arrow.addEventListener("click", function(){
+            if(arrowButtonCheck){
+                arrowButtonCheck = false;
+                /* 화살표 클릭 시 함수 실행이 되지 않도록 clear */
+                clearInterval(inter);
+                banner.style.transition = "transform 0.5s"
+                /* List[2]에 prev, next가 들어있다. */
+                let arrowType = arrow.classList[2];
+                if(arrowType == 'prev'){
+                    count--;
+                    /* 첫 이미지에서 한 번 더 prev를 눌렀을 때 */
+                    if(count == -1){
+                        /* 마지막 이미지로 이동 */
+                        banner.style.transform = "translate(0vw)";
+                        setTimeout(function(){
+                            banner.style.transition = "transform 0s"
+                            banner.style.transform = "translate(-540vw)";
+                        }, 500);
+                        count = 5;
+                    }else{
+                        /* 다른 상황에서는 위치 이동만 하면 된다. */
+                        banner.style.transform = "translate(-" + 90 * (count + 1) + "vw)";
+                    }
+                }else{
+                    /* arrowType이 next 일 때 */
+                    count++;
+                    /* 마지막 이미지에서 next를 한 번 더 눌렀을 때 */
+                    if(count == 6) {
+                        /* 첫 이미지로 변경 */
+                        banner.style.transform = "translate(-" + 90 * (count + 1) + "vw)";
+                        setTimeout(function(){
+                            banner.style.transition = "transform 0s"
+                            banner.style.transform = "translate(-90vw)";
+                        }, 500);
+                        count = 0;
+                    }else{
+                        /* 나머지 상황에서는 위치만 이동 */
+                        banner.style.transform = "translate(-" + 90 * (count + 1) + "vw)";
+                    }
+                }
+                /* 클릭 후 클릭 전 선택된 버튼은 temp에 저장, 기존 색으로 변경한다. */
+                temp.style.backgroundColor = "#f0f0f0";
+                /* 현재 버튼을 temp에 재저장한다. */
+                temp = buttons[count];
+                /* 현재 버튼의 색은 검은색으로 수정한다. */
+                buttons[count].style.backgroundColor = "black";
+                /* 함수 재실행 */
+                inter = setInterval(autoSlide, 4000);
+                /* 0.5초에 한 번만 실행되도록 의도적 지연 */
+                setTimeout(function(){
+                    arrowButtonCheck = true;
+                }, 500);
+            }
+        });
+    });
+
+</script>
+</html>
